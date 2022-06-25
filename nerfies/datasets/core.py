@@ -580,6 +580,7 @@ class DataSource(abc.ABC):
         `metadata`: a dictionary of containing various metadata arrays. Each
           item is an array containing metadata IDs for each ray.
     """
+
     rgb = self.load_rgb(item_id)
     if scale_factor != 1.0:
       rgb = image_utils.rescale_image(rgb, scale_factor)

@@ -102,7 +102,7 @@ class NerfiesDataSource(core.DataSource):
     self.image_scale = image_scale
     self.shuffle_pixels = shuffle_pixels
 
-    self.rgb_dir = gpath.GPath(data_dir, 'rgb', f'{image_scale}x')
+    self.rgb_dir = gpath.GPath(data_dir, 'rgb')
     self.depth_dir = gpath.GPath(data_dir, 'depth', f'{image_scale}x')
     self.camera_type = camera_type
     self.camera_dir = gpath.GPath(data_dir, 'camera')

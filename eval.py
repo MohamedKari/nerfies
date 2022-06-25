@@ -45,7 +45,7 @@ from nerfies import visualization as viz
 flags.DEFINE_enum('mode', None, ['jax_cpu', 'jax_gpu', 'jax_tpu'],
                   'Distributed strategy approach.')
 
-flags.DEFINE_string('base_folder', None, 'where to store ckpts and logs')
+flags.DEFINE_string('base_folder', "experiments/001", 'where to store ckpts and logs')
 flags.mark_flag_as_required('base_folder')
 flags.DEFINE_string('data_dir', None, 'input data directory.')
 flags.DEFINE_multi_string('gin_bindings', None, 'Gin parameter bindings.')
@@ -115,7 +115,8 @@ def process_batch(*,
   summary_writer.image(f'disparity-median/{tag}/{item_id}', disp_med_viz, step)
   summary_writer.image(f'acc/{tag}/{item_id}', acc_viz, step)
 
-  if 'rgb' in batch:
+  # if 'rgb' in batch:
+  if False:
     rgb_target = batch['rgb']
     mse = ((rgb - batch['rgb'])**2).mean()
     psnr = utils.compute_psnr(mse)
@@ -134,7 +135,8 @@ def process_batch(*,
     summary_writer.image(f'rgb-abs-error/{tag}/{item_id}', rgb_abs_error, step)
     summary_writer.image(f'rgb-sq-error/{tag}/{item_id}', rgb_sq_error, step)
 
-  if 'depth' in batch:
+  # if 'depth' in batch:
+  if False:
     depth_target = batch['depth']
     depth_target_viz = colorize_depth(depth_target[..., 0])
     out['depth_abs'] = jnp.nanmean(jnp.abs(depth_target - depth_med))
@@ -262,7 +264,7 @@ def main(argv):
   logging.info('\tcheckpoint_dir = %s', checkpoint_dir)
 
   logging.info('Starting host %d. There are %d hosts : %s', jax.process_index(),
-               jax.process_count(), str(jax.process_indexs()))
+               jax.process_count(), str(jax.process_index()))
   logging.info('Found %d accelerator devices: %s.', jax.local_device_count(),
                str(jax.local_devices()))
   logging.info('Found %d total devices: %s.', jax.device_count(),

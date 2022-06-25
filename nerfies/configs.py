@@ -179,7 +179,7 @@ class TrainConfig:
   # The size of the shuffle buffer size when shuffling the training dataset.
   # This needs to be sufficiently large to contain a diverse set of images in
   # each batch, especially when optimizing GLO embeddings.
-  shuffle_buffer_size: int = 5000000
+  shuffle_buffer_size: int = 500000
   # How often to save a checkpoint.
   save_every: int = 10000
   # How often to log to Tensorboard.
