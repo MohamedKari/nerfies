@@ -14,7 +14,7 @@
             "args": [
                 "--data_dir", "datasets/iphone-home",
                 "--base_folder", "experiments/001", 
-                "--gin_configs", "configs/gpu_quarterhd_8gpu.gin"
+                "--gin_configs", "configs/gpu_quarterhd.gin"
             ],
             "python": "/miniconda/envs/nerfies/bin/python"
         }

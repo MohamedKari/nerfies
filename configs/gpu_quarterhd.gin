@@ -21,7 +21,7 @@
 # learning rate by the sqrt of the factor by which you decreased it. Expect
 # the results to look slightly worse without tuning.
 
-include 'warp_defaults.gin'
+include 'configs/warp_defaults.gin'
 
 max_steps = 250000
 lr_decay_steps = 500000
