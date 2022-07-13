@@ -16,7 +16,7 @@
 # This file is the base configuration for Nerfies.
 # Do not run this directly, it is for importing from other configurations.
 
-include 'defaults.gin'
+include 'configs/defaults.gin'
 
 ModelConfig.use_warp = True
 ModelConfig.use_appearance_metadata = True
