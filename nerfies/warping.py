@@ -320,20 +320,20 @@ class SE3Field(nn.Module):
     return metadata_embed
 
   def warp(self,
-           points: jnp.ndarray,
-           metadata_embed: jnp.ndarray,
-           extra: Dict[str, Any]):
-    points_embed = self.points_encoder(points, alpha=extra.get('alpha'))
-    inputs = jnp.concatenate([points_embed, metadata_embed], axis=-1)
-    trunk_output = self.trunk(inputs)
+           points: jnp.ndarray,         # shape: (12288, 128, 3)
+           metadata_embed: jnp.ndarray, # shape: (12288, 128, 8)
+           extra: Dict[str, Any]): # {'alpha': float, 'time_alpha': float}
+    points_embed = self.points_encoder(points, alpha=extra.get('alpha'))  # resulting shape: (12288, 128, 51)
+    inputs = jnp.concatenate([points_embed, metadata_embed], axis=-1)     # resulting shape: (12288, 128, 59)
+    trunk_output = self.trunk(inputs)                                     # resulting shape: (12288, 128, 128)
 
-    w = self.branches['w'](trunk_output)
-    v = self.branches['v'](trunk_output)
-    theta = jnp.linalg.norm(w, axis=-1)
-    w = w / theta[..., jnp.newaxis]
-    v = v / theta[..., jnp.newaxis]
-    screw_axis = jnp.concatenate([w, v], axis=-1)
-    transform = rigid.exp_se3(screw_axis, theta)
+    w = self.branches['w'](trunk_output)              # resulting shape: (12288, 128, 3)                                 
+    v = self.branches['v'](trunk_output)              # resulting shape: (12288, 128, 3)
+    theta = jnp.linalg.norm(w, axis=-1)               # resulting shape: (12288, 128)
+    w = w / theta[..., jnp.newaxis]                   # resulting shape: (12288, 128, 3)
+    v = v / theta[..., jnp.newaxis]                   # resulting shape: (12288, 128, 3)
+    screw_axis = jnp.concatenate([w, v], axis=-1)     # resulting shape: (12288, 128, 6)
+    transform = rigid.exp_se3(screw_axis, theta)      # resulting shape: (12288, 128, 4, 4)
 
     warped_points = points
     if self.use_pivot:
