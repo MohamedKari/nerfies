@@ -327,13 +327,24 @@ class SE3Field(nn.Module):
     inputs = jnp.concatenate([points_embed, metadata_embed], axis=-1)     # resulting shape: (12288, 128, 59)
     trunk_output = self.trunk(inputs)                                     # resulting shape: (12288, 128, 128)
 
+
     w = self.branches['w'](trunk_output)              # resulting shape: (12288, 128, 3)                                 
     v = self.branches['v'](trunk_output)              # resulting shape: (12288, 128, 3)
+
+    if hasattr(w, "primal"):
+      print("twist", w.primal.val.val.real[0,0], v.primal.val.val.real[0,0])
+
     theta = jnp.linalg.norm(w, axis=-1)               # resulting shape: (12288, 128)
     w = w / theta[..., jnp.newaxis]                   # resulting shape: (12288, 128, 3)
     v = v / theta[..., jnp.newaxis]                   # resulting shape: (12288, 128, 3)
     screw_axis = jnp.concatenate([w, v], axis=-1)     # resulting shape: (12288, 128, 6)
     transform = rigid.exp_se3(screw_axis, theta)      # resulting shape: (12288, 128, 4, 4)
+    
+    if hasattr(screw_axis, "primal"):
+      print("screw_axis", screw_axis.primal.val.val.real[0,0])
+    
+    if hasattr(transform, "primal"):
+      print("transform", transform.primal.val.val.real[0,0])
 
     warped_points = points
     if self.use_pivot:

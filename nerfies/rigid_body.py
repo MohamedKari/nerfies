@@ -81,7 +81,7 @@ def exp_se3(S: jnp.ndarray, theta: float) -> jnp.ndarray:
     a_X_b: (4, 4) The homogeneous transformation matrix attained by integrating
       motion of magnitude theta about S for one second.
   """
-  w, v = jnp.split(S, 2)
+  w, v = jnp.split(S, 2) # resulting shapes: (12288, 128, 3)
   W = skew(w)
   R = exp_so3(w, theta)
   p = (theta * jnp.eye(3) + (1.0 - jnp.cos(theta)) * W +
