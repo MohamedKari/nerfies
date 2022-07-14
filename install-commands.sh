@@ -19,4 +19,10 @@ pip install tqdm
 # pip freeze > requirements-full.txt
 
 
-python train.py --data_dir datasets/iphone-home --base_folder experiments/001 --gin_configs configs/test_vrig.gin
+python train.py --data_dir datasets/iphone-home --base_folder experiments/001 --gin_configs configs/gpu_quarterhd.gin
+
+
+python eval.py \
+        --data_dir datasets/iphone-home \
+        --base_folder experiments/001 \
+        --gin_configs configs/gpu_quarterhd.gin
